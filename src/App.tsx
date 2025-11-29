@@ -1,4 +1,5 @@
 import BudgetForm from "./components/BudgetForm";
+import ExpenseList from "./components/ExpenseList";
 import MainBudgetForm from "./components/MainBudgetForm";
 import ModalBudgetForm from "./components/ModalBudgetForm";
 import { useBudget } from "./hooks/useBudget";
@@ -16,7 +17,12 @@ export default function App() {
       </header>
 
       <section className="mt-10">
-        {reducer.validBudget ? <MainBudgetForm /> : <BudgetForm />}
+        {reducer.validBudget ? (
+          <>
+            <MainBudgetForm />
+            <ExpenseList />
+          </>
+        ) : (<BudgetForm />)}
       </section>
 
       {reducer.validBudget && <ModalBudgetForm />}

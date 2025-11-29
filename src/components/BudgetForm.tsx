@@ -23,6 +23,7 @@ export default function BudgetForm() {
                 onSubmit={e => {
                     e.preventDefault();
                     dispatch({ type: "valid-budget" });
+                    localStorage.setItem('budget', JSON.stringify(reducer.budget));
                 }}
             >
                 <label htmlFor="budget"

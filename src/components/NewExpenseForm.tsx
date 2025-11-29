@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { categories } from "../data/data";
 import type { initialExpenseT } from "../types";
 import ErrorMessage from "./ErrorMessage";
@@ -6,7 +6,13 @@ import { useBudget } from "../hooks/useBudget";
 
 export default function NewExpenseForm() {
 
-    const initialExpense = {
+    const { reducer } = useBudget();
+
+    useMemo(() => {
+        localStorage.setItem('expenses', JSON.stringify(reducer.expenses));
+    }, [reducer.expenses])
+
+    let initialExpense = {
         amount: 0,
         category: '',
         date: '',
@@ -14,6 +20,21 @@ export default function NewExpenseForm() {
     }
 
     const [expense, setExpense] = useState<initialExpenseT>(initialExpense);
+
+    useMemo(() => {
+        if (reducer.editId !== '') {
+            const editExpense = reducer.expenses.filter(e => e.id === reducer.editId)[0];
+            const { amount, category, date, name } = editExpense;
+            setExpense({
+                amount,
+                category,
+                date,
+                name
+            });
+        } else {
+            setExpense(initialExpense);
+        }
+    }, [reducer.editId]);
 
     const [error, setError] = useState('');
 
@@ -43,7 +64,7 @@ export default function NewExpenseForm() {
     return (
         <>
             <form className="w-xl space-y-5" onSubmit={handleSubmit}>
-                <legend className="uppercase text-2xl font-bold text-cyan-950 border-b-4 text-center">Nuevo gasto</legend>
+                <legend className="uppercase text-2xl font-bold text-cyan-950 border-b-4 text-center">{reducer.editId === '' ? 'Nuevo Gasto' : 'Editar Gasto'}</legend>
                 {error !== '' ? (<ErrorMessage>{error}</ErrorMessage>) : (<></>)}
                 <div className="flex flex-col">
                     <label htmlFor="name" className="text-lg">Nombre Gasto:</label>
@@ -84,8 +105,9 @@ export default function NewExpenseForm() {
                         onChange={handleChange}
                     />
                 </div>
-                <input type="submit" value="Agregar Gasto"
+                <input type="submit"
                     className=" w-full bg-cyan-950 uppercase text-white font-bold p-1.5 cursor-pointer rounded-sm hover:bg-cyan-800 transition-all"
+                    value={reducer.editId === '' ? 'Guardar Gasto' : 'Guardar Cambios'}
                 />
             </form>
         </>

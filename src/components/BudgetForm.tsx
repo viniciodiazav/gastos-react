@@ -32,7 +32,7 @@ export default function BudgetForm() {
                     className="bg-gray-100 outline-none p-2 rounded-sm transition-all"
                     onBlur={handleInputBlur}
                     value={reducer.budget === 0 ? '' : reducer.budget}
-                    onChange={(e) => dispatch({ type: "add-budget", pyload: { budget: +e.target.value } })}
+                    onChange={(e) => dispatch({ type: "add-budget", payload: { budget: +e.target.value } })}
                 />
                 <input type="submit" value="Guardar presupuesto"
                     className="uppercase bg-cyan-950 text-white font-bold text-lg p-2 rounded-sm disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"

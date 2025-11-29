@@ -7,7 +7,7 @@ export type BudgetActions =
     { type: 'open-modal' } |
     { type: 'close-modal' } |
     { type: 'add-expense', payload: { expense: initialExpenseT } } |
-    { type: 'delete-expense', payload: { id: ExpenseT['id'] } } |
+    { type: 'delete-expense', payload: { id: ExpenseT['id'], amount: number } } |
     { type: 'edit-expense', payload: { id: ExpenseT['id'] } } |
     { type: 'reset-app' }
 
@@ -27,6 +27,8 @@ export type BudgetStateT = {
     modal: boolean;
     expenses: ExpenseT[];
     editId: ExpenseT['id'];
+    totalExpended: number;
+    availableBudget: number;
 }
 
 export const initialbudgetState: BudgetStateT = {
@@ -35,6 +37,9 @@ export const initialbudgetState: BudgetStateT = {
     modal: false,
     expenses: getExpensesLocalStorage(),
     editId: '',
+    totalExpended: getExpensesLocalStorage() ? 0 : getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0),
+    availableBudget: getExpensesLocalStorage() ? 0 : getBudgetLocalStorage() - getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0),
+
 }
 
 export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: BudgetActions) => {
@@ -84,13 +89,17 @@ export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: 
             expenses: updateExpenses,
             modal: false,
             editId: '',
+            totalExpended: state.totalExpended + action.payload.expense.amount,
+            availableBudget: state.budget - (state.totalExpended + action.payload.expense.amount),
         }
     }
     if (action.type === "delete-expense") {
         const newExpenses = state.expenses.filter(e => e.id !== action.payload.id);
         return {
             ...state,
-            expenses: newExpenses
+            expenses: newExpenses,
+            totalExpended: state.totalExpended - action.payload.amount,
+            availableBudget: state.budget - (state.totalExpended - action.payload.amount),
         }
     }
     if (action.type === "edit-expense") {
@@ -101,13 +110,16 @@ export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: 
         }
     }
     if (action.type === "reset-app") {
-        return {
+        const initSatet: BudgetStateT = {
             budget: 0,
             validBudget: false,
             modal: false,
             expenses: [],
             editId: '',
+            availableBudget: 0,
+            totalExpended: 0,
         }
+        return initSatet;
     }
     return state;
 }

@@ -36,7 +36,7 @@ export default function ExpenseDetails({ expense }: ExpenseDetailsProps) {
     const trailingActions = () => (
         <TrailingActions>
             <SwipeAction
-                onClick={() => { dispatch({ type: "delete-expense", payload: { id: expense.id } }) }}
+                onClick={() => { dispatch({ type: "delete-expense", payload: { id: expense.id, amount: expense.amount } }) }}
                 destructive={true}
             >
                 Eliminar

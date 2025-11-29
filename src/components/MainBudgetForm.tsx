@@ -3,7 +3,7 @@ import { useBudget } from "../hooks/useBudget";
 
 export default function MainBudgetForm() {
 
-    const { dispatch } = useBudget();
+    const { dispatch, reducer } = useBudget();
 
     return (
         <div className="max-w-2xl m-auto">
@@ -14,11 +14,11 @@ export default function MainBudgetForm() {
                         onClick={() => dispatch({type: "reset-app"})}
                     >Resetear app</button>
 
-                    <p className="text-xl font-bold text-cyan-800">Presupuesto: <span className="text-black">{formatCurrency(100)}</span></p>
+                    <p className="text-xl font-bold text-cyan-800">Presupuesto: <span className="text-black">{formatCurrency(reducer.budget)}</span></p>
 
-                    <p className="text-xl font-bold text-cyan-800">Disponible: <span className="text-black">{formatCurrency(100)}</span></p>
+                    <p className="text-xl font-bold text-cyan-800">Disponible: <span className="text-black">{formatCurrency(reducer.availableBudget)}</span></p>
 
-                    <p className="text-xl font-bold text-cyan-800">Gastado: <span className="text-black">{formatCurrency(100)}</span></p>
+                    <p className="text-xl font-bold text-cyan-800">Gastado: <span className="text-black">{formatCurrency(reducer.totalExpended)}</span></p>
 
                 </div>
             </div>

@@ -16,7 +16,7 @@ export default function App() {
         </div>
       </header>
 
-      <section className="mt-10">
+      <section className="my-10">
         {reducer.validBudget ? (
           <>
             <MainBudgetForm />

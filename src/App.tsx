@@ -1,0 +1,25 @@
+import BudgetForm from "./components/BudgetForm";
+import MainBudgetForm from "./components/MainBudgetForm";
+import ModalBudgetForm from "./components/ModalBudgetForm";
+import { useBudget } from "./hooks/useBudget";
+
+export default function App() {
+
+  const { reducer } = useBudget();
+
+  return (
+    <>
+      <header>
+        <div>
+          <h1 className="bg-cyan-950 p-6 text-center text-white text-4xl font-bold uppercase">Control de gastos</h1>
+        </div>
+      </header>
+
+      <section className="mt-10">
+        {reducer.validBudget ? <MainBudgetForm /> : <BudgetForm />}
+      </section>
+
+      {reducer.validBudget && <ModalBudgetForm />}
+    </>
+  )
+}

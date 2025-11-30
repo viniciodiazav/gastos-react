@@ -1,4 +1,5 @@
 import BudgetForm from "./components/BudgetForm";
+import CategoryFilter from "./components/CategoryFilter";
 import ExpenseList from "./components/ExpenseList";
 import MainBudgetForm from "./components/MainBudgetForm";
 import ModalBudgetForm from "./components/ModalBudgetForm";
@@ -20,6 +21,7 @@ export default function App() {
         {reducer.validBudget ? (
           <>
             <MainBudgetForm />
+            <CategoryFilter />
             <ExpenseList />
           </>
         ) : (<BudgetForm />)}

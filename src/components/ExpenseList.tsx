@@ -7,7 +7,7 @@ export default function ExpenseList() {
 
     return (
         <>
-            <div className="bg-white mt-8 max-w-2xl m-auto p-5 rounded-sm shadow">
+            <div className="bg-white mt-10 max-w-2xl m-auto p-5 rounded-sm shadow">
                 {reducer.expenses.length === 0 ?
                     (
                         <p className="text-2xl font-bold ">Todavia no hay gastos</p>

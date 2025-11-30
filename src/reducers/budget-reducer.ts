@@ -37,8 +37,8 @@ export const initialbudgetState: BudgetStateT = {
     modal: false,
     expenses: getExpensesLocalStorage(),
     editId: '',
-    totalExpended: getExpensesLocalStorage() ? 0 : getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0),
-    availableBudget: getExpensesLocalStorage() ? 0 : getBudgetLocalStorage() - getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0),
+    totalExpended: getExpensesLocalStorage() ?  getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0) : 0,
+    availableBudget: getExpensesLocalStorage() ? getBudgetLocalStorage() - getExpensesLocalStorage().reduce((t, e) => t + e.amount, 0) : getBudgetLocalStorage(),
 
 }
 
@@ -46,7 +46,8 @@ export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: 
     if (action.type === 'add-budget') {
         return {
             ...state,
-            budget: action.payload.budget
+            budget: action.payload.budget,
+            availableBudget: action.payload.budget,
         }
     }
     if (action.type === 'valid-budget') {
@@ -89,8 +90,8 @@ export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: 
             expenses: updateExpenses,
             modal: false,
             editId: '',
-            totalExpended: state.totalExpended + action.payload.expense.amount,
-            availableBudget: state.budget - (state.totalExpended + action.payload.expense.amount),
+            totalExpended: updateExpenses.reduce((t, e) => t + e.amount, 0),
+            availableBudget: state.budget - updateExpenses.reduce((t, e) => t + e.amount, 0),
         }
     }
     if (action.type === "delete-expense") {
@@ -110,6 +111,8 @@ export const budgetReducer = (state: BudgetStateT = initialbudgetState, action: 
         }
     }
     if (action.type === "reset-app") {
+        localStorage.setItem('budget', JSON.stringify(0));
+        localStorage.setItem('expenses', JSON.stringify([]));
         const initSatet: BudgetStateT = {
             budget: 0,
             validBudget: false,

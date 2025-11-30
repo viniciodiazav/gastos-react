@@ -55,15 +55,16 @@ export default function NewExpenseForm() {
             setTimeout(() => {
                 setError('');
             }, 3000)
-        } else {
-            dispatch({ type: "add-expense", payload: { expense: expense } });
-            setExpense(initialExpense);
+            return;
         }
+        dispatch({ type: "add-expense", payload: { expense: expense } });
+        setExpense(initialExpense);
     }
+
 
     return (
         <>
-            <form className="w-xl space-y-5" onSubmit={handleSubmit}>
+            <form className="w-xl space-y-3" onSubmit={handleSubmit}>
                 <legend className="uppercase text-2xl font-bold text-cyan-950 border-b-4 text-center">{reducer.editId === '' ? 'Nuevo Gasto' : 'Editar Gasto'}</legend>
                 {error !== '' ? (<ErrorMessage>{error}</ErrorMessage>) : (<></>)}
                 <div className="flex flex-col">
@@ -81,7 +82,9 @@ export default function NewExpenseForm() {
                         className="outline-none bg-gray-200 p-1 rounded-sm"
                         value={expense.amount === 0 ? '' : expense.amount}
                         placeholder="Ingrese una cantidad"
-                        onChange={handleChange}
+                        onChange={e => {
+                            handleChange(e);
+                        }}
                     />
                 </div>
                 <div className="flex flex-col">
@@ -91,7 +94,7 @@ export default function NewExpenseForm() {
                         value={expense.category}
                         onChange={handleChange}
                     >
-                        <option value="0">--Seleccione--</option>
+                        <option value="">--Seleccione--</option>
                         {categories.map(c =>
                             <option key={c.id} value={c.id} id={c.id}>{c.name}</option>
                         )}
